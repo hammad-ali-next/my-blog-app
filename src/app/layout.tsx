@@ -22,7 +22,7 @@ export default function RootLayout({
 
         <footer className="m-6 z-20 w-vh p-4 bg-white border-t border-gray-200 shadow-sm flex items-center justify-center text-center">
           <span className="text-sm">
-            © 2023{" "}
+            © 2025{" "}
             <a href="/" className="hover:underline">
               Bloogie™
             </a>

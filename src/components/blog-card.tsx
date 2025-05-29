@@ -11,8 +11,8 @@ export type blogCard = {
 
 export default function BlogCard({ blog }: blogCard) {
   return (
-    <div className="flex p-3 rounded-2xl ">
-      <div className="border rounded-lg shadow p-4 hover:shadow-md transition-shadow duration-300">
+    <div className="flex m-3 p-3 rounded-2xl hover:shadow-2xl duration-200">
+      <div className="rounded-2xl p-4 hover:shadow-md transition-shadow duration-300">
         {blog.image && (
           <div className="w-80">
             <Image
@@ -25,8 +25,10 @@ export default function BlogCard({ blog }: blogCard) {
           </div>
         )}
         <h2 className="text-xl font-semibold mt-2">{blog.title}</h2>
-        <p className="text-gray-600 mt-1">{blog.created_date}</p>
-        <p className="text-sm text-gray-500 mt-2">By {blog.author_name}</p>
+        <div className="flex justify-between">
+          <p className="text-sm text-gray-500 mt-2">By {blog.author_name}</p>
+          <p className="text-gray-600 mt-1 ">{blog.created_date}</p>
+        </div>
       </div>
     </div>
   );
