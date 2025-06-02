@@ -49,7 +49,7 @@ export default function TextEditor({ content, onChange }: Props) {
   return (
     <>
       {/* Editor wrapper */}
-      <div className="border rounded-md p-3 min-h-[200px] max-w-full overflow-hidden">
+      <div className="border rounded-md p-3 min-h-[200px] max-w-full overflow-hidden border-red-300 focus-within:ring-2 focus-within:ring-red-400 transition">
         <MenuBar editor={editor} />
         <EditorContent
           editor={editor}
@@ -87,11 +87,11 @@ function MenuBar({ editor }: { editor: any }) {
   const baseBtnClasses =
     "px-3 py-1 rounded border transition-colors duration-150 select-none";
 
-  // Returns the appropriate button style based on active state
+  // Updated red theme button classes
   const btnClass = (active: boolean) =>
     active
-      ? "bg-blue-600 text-white border-blue-600"
-      : "bg-white text-gray-700 border-gray-300 hover:bg-gray-100";
+      ? "bg-red-600 text-white border-red-600"
+      : "bg-white text-red-700 border-red-300 hover:bg-red-100";
 
   return (
     <div className="mb-3 flex flex-wrap gap-2">
@@ -152,7 +152,7 @@ function MenuBar({ editor }: { editor: any }) {
             .setColor((e.target as HTMLInputElement).value)
             .run()
         }
-        className="w-10 h-6 cursor-pointer rounded border border-gray-300 p-0"
+        className="w-10 h-6 cursor-pointer rounded border border-red-300 p-0"
         title="Text Color"
         aria-label="Text Color"
       />

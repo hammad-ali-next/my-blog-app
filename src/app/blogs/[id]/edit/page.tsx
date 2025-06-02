@@ -92,35 +92,43 @@ export default function EditBlogPage() {
   if (loading) return <p className="p-6">Loading...</p>;
 
   return (
-    <main className="max-w-3xl mx-auto p-6">
-      <h1 className="text-4xl mb-6">Edit Blog</h1>
+    <main className="max-w-3xl mx-auto p-8 bg-white rounded-3xl shadow-lg">
+      <h1 className="text-4xl font-extrabold mb-8 text-red-700">Edit Blog</h1>
 
-      <form onSubmit={handleSubmit} className="space-y-4">
+      <form onSubmit={handleSubmit} className="space-y-6">
         <div>
-          <label className="block font-semibold mb-1">Title*</label>
+          <label className="block font-semibold mb-2 text-red-700">
+            Title*
+          </label>
           <input
             type="text"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
-            className="w-full border p-2 rounded"
+            className="w-full border border-red-300 rounded-xl p-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-red-400 transition"
             required
           />
         </div>
 
         <div>
-          <label className="block font-semibold mb-1">Body*</label>
-          <TextEditor content={body} onChange={setBody} />
+          <label className="block font-semibold mb-2 text-red-700">Body*</label>
+          <div className="border border-red-300 rounded-xl focus-within:ring-2 focus-within:ring-red-400 transition">
+            <TextEditor content={body} onChange={setBody} />
+          </div>
         </div>
 
         <div>
-          <label className="block font-semibold mb-1">Category*</label>
+          <label className="block font-semibold mb-2 text-red-700">
+            Category*
+          </label>
           <select
             value={category}
             onChange={(e) => setCategory(e.target.value)}
-            className="w-full border p-2 rounded"
+            className="w-full border border-red-300 rounded-xl p-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-red-400 transition"
             required
           >
-            <option value="">Select a category</option>
+            <option value="" disabled>
+              Select a category
+            </option>
             {categories.map((cat) => (
               <option key={cat.name} value={cat.name}>
                 {cat.name}
@@ -130,22 +138,41 @@ export default function EditBlogPage() {
         </div>
 
         <div>
-          <label className="block font-semibold mb-1">Image (required)</label>
-          <input type="file" accept="image/*" onChange={handleImageChange} />
+          <label className="block font-semibold mb-2 text-red-700">
+            Image (required)
+          </label>
+
+          {/* Custom file input */}
+          <label
+            htmlFor="imageUpload"
+            className="inline-block cursor-pointer rounded-xl border border-dashed border-red-400 px-6 py-4 text-red-600 hover:border-red-600 hover:text-red-700 transition text-center w-full"
+          >
+            Choose an image
+          </label>
+          <input
+            id="imageUpload"
+            type="file"
+            accept="image/*"
+            onChange={handleImageChange}
+            className="hidden"
+          />
+
           {imageBase64 && (
-            <img
-              src={imageBase64}
-              alt="Preview"
-              className="mt-2 max-h-48 object-contain rounded"
-            />
+            <div className="mt-4 rounded-xl overflow-hidden border border-red-300 shadow-md max-h-64 w-full">
+              <img
+                src={imageBase64}
+                alt="Preview"
+                className="w-full h-full object-contain"
+              />
+            </div>
           )}
         </div>
 
-        {error && <p className="text-red-500">{error}</p>}
+        {error && <p className="text-red-600 font-semibold">{error}</p>}
 
         <button
           type="submit"
-          className="bg-green-500 text-white px-6 py-2 rounded hover:bg-green-600"
+          className="w-full bg-red-600 text-white font-semibold py-3 rounded-xl hover:bg-red-700 transition"
         >
           Update Blog
         </button>
