@@ -5,7 +5,8 @@ import axiosInstance from "@/utils/axiosInstance";
 import Link from "next/link";
 import { AxiosError } from "axios";
 
-export default function Login() {
+export default function Register() {
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -14,23 +15,20 @@ export default function Login() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    const formData = new FormData();
-    formData.append("username", email);
-    formData.append("password", password);
+    const data = {
+      name: name,
+      email: email, // note: backend expects `email`, not `username`
+      password: password,
+    };
     try {
-      const response = await axiosInstance.post(
-        // 'https://fast-api-first.vercel.app/login',
-        "/login",
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
-      console.log("Login Success", response.data);
-      window.dispatchEvent(new Event("login"));
-      router.push("/");
+      const response = await axiosInstance.post("/users/register", data, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      console.log("Register Success", response.data);
+
+      router.push("/login");
     } catch (err) {
       const error = err as AxiosError<{ detail?: string }>;
       const errorMessage =
@@ -43,11 +41,23 @@ export default function Login() {
     <>
       <main className="min-h-screen flex items-center justify-center">
         <div>
-          <h1 className="text-6xl text-center mb-10">Login</h1>
+          <h1 className="text-6xl text-center mb-10">Register</h1>
           <form
             onSubmit={handleSubmit}
             className="m-2 space-y-3 flex flex-col mx-auto max-w-sm"
           >
+            <div className="w-full">
+              <label htmlFor="name" className="mr-2">
+                Name
+              </label>
+              <input
+                name="name"
+                className="w-full border rounded-2xl border-blue-400 focus:border-blue-600 p-2"
+                placeholder="Name"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+              />
+            </div>
             <div className="w-full">
               <label htmlFor="email" className="mr-2">
                 Email
@@ -74,22 +84,21 @@ export default function Login() {
               />
             </div>
             <button className="p-2 bg-blue-400 rounded-2xl hover:bg-blue-600">
-              Log In
+              Register
             </button>
           </form>
 
           {error && (
             <p className="mt-2 text-red-500 text-center font-medium">{error}</p>
           )}
-
           <div className="m-3">
             <span>
-              Not have account, click to{" "}
+              Already have account?, click to{" "}
               <Link
-                href="/register"
+                href="/login"
                 className="underline text-blue-400 hover:text-blue-600 text-[20px] transition-all duration-300 ease-in-out"
               >
-                Register
+                Login
               </Link>
             </span>
           </div>

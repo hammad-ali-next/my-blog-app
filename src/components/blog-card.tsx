@@ -1,34 +1,40 @@
 import Image from "next/image";
 
-export type blogCard = {
+type BlogCardProps = {
   blog: {
+    id: number;
     title: string;
-    image: string;
+    image_base64: string; // base64 or URL
     author_name: string;
     created_date: string;
   };
 };
 
-export default function BlogCard({ blog }: blogCard) {
+export default function BlogCard({ blog }: BlogCardProps) {
   return (
-    <div className="flex m-3 p-3 rounded-2xl hover:shadow-2xl duration-200">
-      <div className="rounded-2xl p-4 hover:shadow-md transition-shadow duration-300">
-        {blog.image && (
-          <div className="w-80">
-            <Image
-              src={blog.image}
-              alt={blog.title}
-              width={70}
-              height={70}
-              className="w-full h-48 object-cover rounded"
-            />
-          </div>
-        )}
-        <h2 className="text-xl font-semibold mt-2">{blog.title}</h2>
-        <div className="flex justify-between">
-          <p className="text-sm text-gray-500 mt-2">By {blog.author_name}</p>
-          <p className="text-gray-600 mt-1 ">{blog.created_date}</p>
-        </div>
+    <div className="max-w-xs rounded shadow-md overflow-hidden cursor-pointer hover:shadow-lg transition-shadow duration-300">
+      {blog.image_base64.startsWith("data:image") ? (
+        <img
+          src={blog.image_base64}
+          alt={blog.title}
+          className="w-full h-48 object-cover"
+        />
+      ) : (
+        <Image
+          src={blog.image_base64}
+          alt={blog.title}
+          width={400}
+          height={192}
+          className="w-full h-48 object-cover"
+          priority={false}
+        />
+      )}
+
+      <div className="p-4">
+        <h2 className="font-semibold text-lg mb-2">{blog.title}</h2>
+        <p className="text-sm text-gray-500">
+          By {blog.author_name} - {blog.created_date}
+        </p>
       </div>
     </div>
   );
