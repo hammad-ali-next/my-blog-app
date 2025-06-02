@@ -33,24 +33,28 @@ export default async function Blogs({
     console.log("Fetched blogs:", blogs);
 
     return (
-      <main className="p-6">
-        <h1 className="text-3xl text-center mb-4">Blogs</h1>
+      <main className="p-8 bg-gray-50 min-h-screen rounded-2xl">
+        <h1 className="text-4xl font-bold text-center mb-8 text-gray-900">
+          Blogs
+        </h1>
 
         {category && (
-          <p className="text-center text-gray-600 mb-6">
+          <p className="text-center text-gray-600 mb-8">
             Showing blogs in category:{" "}
-            <span className="capitalize font-semibold">{category}</span>
+            <span className="capitalize font-semibold text-gray-800">
+              {category}
+            </span>
           </p>
         )}
 
         {blogs.length === 0 ? (
-          <p className="text-center text-gray-500">
+          <p className="text-center text-gray-500 text-lg">
             No blogs found{category ? ` in category "${category}"` : ""}.
           </p>
         ) : (
-          <div className="container mx-auto flex flex-wrap gap-6 justify-evenly">
+          <div className="container mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
             {blogs.map((b) => (
-              <Link key={b.id} href={`/blogs/${b.id}`}>
+              <Link key={b.id} href={`/blogs/${b.id}`} className="group">
                 <BlogCard blog={b} />
               </Link>
             ))}

@@ -42,40 +42,47 @@ export default function MyBlogs() {
   }, []);
 
   if (loading) {
-    return <div className="text-center mt-6 text-blue-500">Loading...</div>;
+    return (
+      <div className="text-center mt-10 text-red-600 font-semibold text-lg">
+        Loading...
+      </div>
+    );
   }
 
   if (error) {
     return (
-      <div className="p-3 text-center text-red-500 border-red-500 border rounded-2xl mt-6">
+      <div className="p-4 max-w-lg mx-auto mt-10 text-center text-red-600 border border-red-400 rounded-2xl">
         Error: {error}
       </div>
     );
   }
 
   return (
-    <main className="p-6">
-      <h1 className="text-3xl text-center mb-4">Blogs</h1>
+    <main className="p-8 bg-gray-50 min-h-screen rounded-2xl">
+      <h1 className="text-4xl font-bold text-center mb-8 text-gray-900">
+        Blogs
+      </h1>
 
       {blogs.length === 0 ? (
-        <p className="text-center text-gray-500">No blogs found!</p>
+        <p className="text-center text-gray-500 text-lg">No blogs found!</p>
       ) : (
-        <div className="container mx-auto flex flex-wrap gap-6 justify-evenly">
+        <div className="container mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
           {blogs.map((b) => (
-            <div key={b.id}>
-              <Link href={`/blogs/${b.id}`}>
+            <div key={b.id} className="flex flex-col">
+              <Link href={`/blogs/${b.id}`} className="group">
                 <BlogCard blog={b} />
               </Link>
-              <div className="flex space-x-3 mt-2">
+
+              <div className="flex justify-center gap-4 mt-3">
                 <Link
                   href={`/blogs/${b.id}/edit`}
-                  className="bg-yellow-200 px-4 py-1 rounded hover:bg-yellow-300"
+                  className="px-4 py-2 rounded-full bg-yellow-300 text-yellow-900 font-semibold hover:bg-yellow-400 transition"
                 >
                   Edit
                 </Link>
                 <Link
                   href={`/blogs/delete/${b.id}`}
-                  className="bg-red-200 px-4 py-1 rounded hover:bg-red-300"
+                  className="px-4 py-2 rounded-full bg-red-300 text-red-900 font-semibold hover:bg-red-400 transition"
                 >
                   Delete
                 </Link>

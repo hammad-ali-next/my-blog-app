@@ -1,4 +1,4 @@
-"use client"; // Required for client-side logic
+"use client";
 
 import { useEffect, useState } from "react";
 import Image from "next/image";
@@ -28,16 +28,14 @@ export default function Navbar() {
         .catch(() => setIsLoggedIn(false));
     };
 
-    checkAuth(); // Initial check on mount
+    checkAuth();
 
-    // Listen for custom "login" event and re-check auth when triggered
     const handleLoginEvent = () => {
       checkAuth();
     };
 
     window.addEventListener("login", handleLoginEvent);
 
-    // Cleanup on unmount
     return () => {
       window.removeEventListener("login", handleLoginEvent);
     };
@@ -58,61 +56,64 @@ export default function Navbar() {
   };
 
   return (
-    <nav className="m-6 bg-white border border-gray-200 rounded-2xl p-6 bg-amber-00 w-vh flex items-center justify-evenly">
-      <Link href="/">
-        <div className="flex max-w-7xl space-x-2 items-center">
-          <Image
-            src="/logo.png"
-            alt="logo"
-            width={40}
-            height={40}
-            className="object-contain"
-          />
-          <span className="text-xl font-bold text-blue-400">Bloogie</span>
-        </div>
+    <nav className="bg-white shadow-md rounded-2xl p-4 max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-4">
+      <Link href="/" className="flex items-center space-x-3">
+        <Image
+          src="/logo.png"
+          alt="logo"
+          width={40}
+          height={40}
+          className="object-contain"
+          priority
+        />
+        <span className="text-2xl font-extrabold text-gray-900 hover:text-red-600 transition-colors duration-300">
+          Bloogie
+        </span>
       </Link>
 
-      <ul className="flex space-x-4">
+      <ul className="flex space-x-6 text-gray-700 font-semibold">
         {categories.map((cat, index) => (
           <Link
             href={`/blogs?category=${cat.name.toLowerCase()}`}
             key={index}
-            className="bg-blue-100 p-2 rounded-3xl hover:text-blue-500 hover:text-2xl duration-300 ease-in-out hover:transition-all cursor-pointer"
+            className="px-4 py-2 rounded-full text-gray-700 hover:text-red-600 hover:bg-red-50 transition-colors duration-300 cursor-pointer"
           >
             {cat.name}
           </Link>
         ))}
       </ul>
 
-      {isLoggedIn ? (
-        <div className="flex space-x-2">
+      <div className="flex space-x-4 items-center">
+        {isLoggedIn ? (
+          <>
+            <button
+              onClick={() => router.push("/blogs/my-blogs")}
+              className="px-4 py-2 border border-red-600 text-red-600 rounded-full hover:bg-red-600 hover:text-white transition-colors duration-300"
+            >
+              My Blogs
+            </button>
+            <button
+              onClick={() => router.push("/blogs/create")}
+              className="px-4 py-2 border border-red-600 text-red-600 rounded-full hover:bg-red-600 hover:text-white transition-colors duration-300"
+            >
+              Create Blog
+            </button>
+            <button
+              onClick={handleLogout}
+              className="px-4 py-2 border border-red-600 text-red-600 rounded-full hover:bg-red-600 hover:text-white transition-colors duration-300"
+            >
+              Logout
+            </button>
+          </>
+        ) : (
           <button
-            onClick={() => router.push("/blogs/my-blogs")}
-            className="bg-green-100 p-2 rounded-3xl hover:text-green-500 duration-300 hover:text-2xl ease-in-out hover:transition-all cursor-pointer"
+            onClick={handleLogin}
+            className="px-4 py-2 border border-red-600 text-red-600 rounded-full hover:bg-red-600 hover:text-white transition-colors duration-300"
           >
-            My Blogs
+            Log In
           </button>
-          <button
-            onClick={() => router.push("/blogs/create")}
-            className="bg-green-100 p-2 rounded-3xl hover:text-green-500 duration-300 hover:text-2xl ease-in-out hover:transition-all cursor-pointer"
-          >
-            Create Blog
-          </button>
-          <button
-            onClick={handleLogout}
-            className="bg-red-100 p-2 rounded-3xl hover:text-red-500 hover:text-2xl duration-300 ease-in-out hover:transition-all cursor-pointer"
-          >
-            Logout
-          </button>
-        </div>
-      ) : (
-        <button
-          onClick={handleLogin}
-          className="bg-blue-100 p-2 rounded-3xl hover:text-blue-500 hover:text-2xl duration-300 ease-in-out hover:transition-all cursor-pointer"
-        >
-          Log In
-        </button>
-      )}
+        )}
+      </div>
     </nav>
   );
 }
