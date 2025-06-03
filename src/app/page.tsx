@@ -8,7 +8,7 @@ export default function Home() {
         Discover posts on technology, travel, food, and more.
       </p>
       <Link href="/blogs">
-        <button className="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700">
+        <button className="bg-black text-white px-6 py-2 rounded-[5px] hover:bg-red-700">
           View Blogs
         </button>
       </Link>

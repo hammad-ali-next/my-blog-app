@@ -14,6 +14,14 @@ export type blogCard = {
   created_date: string;
 };
 
+type RawBlog = {
+  id: number;
+  title: string;
+  image_base64: string;
+  creator: { name: string };
+  created_date?: string;
+};
+
 export default function MyBlogs() {
   const [blogs, setBlogs] = useState<blogCard[]>([]);
   const [error, setError] = useState("");
@@ -23,7 +31,7 @@ export default function MyBlogs() {
     axiosInstance
       .get("/users/blogs")
       .then((res) => {
-        const blogData: blogCard[] = res.data.map((b: any) => ({
+        const blogData: blogCard[] = res.data.map((b: RawBlog) => ({
           id: b.id,
           title: b.title,
           image_base64: b.image_base64,
@@ -58,13 +66,15 @@ export default function MyBlogs() {
   }
 
   return (
-    <main className="p-8 bg-gray-50 min-h-screen rounded-2xl">
-      <h1 className="text-4xl font-bold text-center mb-8 text-gray-900">
-        Blogs
+    <main className="p-8 px-80 min-h-screen rounded-2xl">
+      <h1 className="text-[90px] font-bold text-center mb-8 text-gray-900">
+        My Blogs
       </h1>
 
       {blogs.length === 0 ? (
-        <p className="text-center text-gray-500 text-lg">No blogs found!</p>
+        <p className="text-center text-gray-500 text-lg">
+          You haven&apos;t created any blogs yet.
+        </p>
       ) : (
         <div className="container mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
           {blogs.map((b) => (
@@ -76,13 +86,13 @@ export default function MyBlogs() {
               <div className="flex justify-center gap-4 mt-3">
                 <Link
                   href={`/blogs/${b.id}/edit`}
-                  className="px-4 py-2 rounded-full bg-yellow-300 text-yellow-900 font-semibold hover:bg-yellow-400 transition"
+                  className="px-4 py-2 rounded-[5px] bg-yellow-300 text-yellow-900 font-semibold hover:bg-yellow-400 transition"
                 >
                   Edit
                 </Link>
                 <Link
                   href={`/blogs/delete/${b.id}`}
-                  className="px-4 py-2 rounded-full bg-red-300 text-red-900 font-semibold hover:bg-red-400 transition"
+                  className="px-4 py-2 rounded-[5px] bg-red-300 text-red-900 font-semibold hover:bg-red-400 transition"
                 >
                   Delete
                 </Link>

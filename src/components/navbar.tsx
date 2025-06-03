@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import axiosInstance from "@/utils/axiosInstance";
 
 export type Category = {
@@ -13,6 +13,7 @@ export type Category = {
 export default function Navbar() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const router = useRouter();
+  const pathname = usePathname(); // Track current path
 
   const categories: Category[] = [
     { name: "Technology" },
@@ -39,7 +40,7 @@ export default function Navbar() {
     return () => {
       window.removeEventListener("login", handleLoginEvent);
     };
-  }, []);
+  }, [pathname]); // Re-run effect when route changes
 
   const handleLogin = () => {
     router.push("/login");
@@ -56,8 +57,8 @@ export default function Navbar() {
   };
 
   return (
-    <nav className="bg-white shadow-md rounded-2xl p-4 max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-4">
-      <Link href="/" className="flex items-center space-x-3">
+    <nav className="bg-white fixed top-0 left-0 right-0 z-50 p-4 w-full h-[100px] mx-auto flex flex-wrap items-center justify-between gap-4">
+      <Link href="/" className="flex pl-44 items-center space-x-3">
         <Image
           src="/logo.png"
           alt="logo"
@@ -66,7 +67,7 @@ export default function Navbar() {
           className="object-contain"
           priority
         />
-        <span className="text-2xl font-extrabold text-gray-900 hover:text-red-600 transition-colors duration-300">
+        <span className="text-2xl font-bold text-black hover:text-red-600 transition-colors duration-300">
           Bloogie
         </span>
       </Link>
@@ -76,31 +77,31 @@ export default function Navbar() {
           <Link
             href={`/blogs?category=${cat.name.toLowerCase()}`}
             key={index}
-            className="px-4 py-2 rounded-full text-gray-700 hover:text-red-600 hover:bg-red-50 transition-colors duration-300 cursor-pointer"
+            className="px-4 py-2 font-bold hover:text-red-600 transition-colors duration-300 cursor-pointer"
           >
             {cat.name}
           </Link>
         ))}
       </ul>
 
-      <div className="flex space-x-4 items-center">
+      <div className="flex space-x-4 items-center pr-44">
         {isLoggedIn ? (
           <>
             <button
               onClick={() => router.push("/blogs/my-blogs")}
-              className="px-4 py-2 border border-red-600 text-red-600 rounded-full hover:bg-red-600 hover:text-white transition-colors duration-300"
+              className="px-4 py-2 bg-black  text-white rounded-[5px] font-bold hover:bg-red-600 hover:text-white transition-colors duration-300"
             >
               My Blogs
             </button>
             <button
               onClick={() => router.push("/blogs/create")}
-              className="px-4 py-2 border border-red-600 text-red-600 rounded-full hover:bg-red-600 hover:text-white transition-colors duration-300"
+              className="px-4 py-2 bg-black  text-white rounded-[5px] font-bold hover:bg-red-600 hover:text-white transition-colors duration-300"
             >
               Create Blog
             </button>
             <button
               onClick={handleLogout}
-              className="px-4 py-2 border border-red-600 text-red-600 rounded-full hover:bg-red-600 hover:text-white transition-colors duration-300"
+              className="px-4 py-2 bg-black  text-white rounded-[5px] font-bold hover:bg-red-600 hover:text-white transition-colors duration-300"
             >
               Logout
             </button>
@@ -108,7 +109,7 @@ export default function Navbar() {
         ) : (
           <button
             onClick={handleLogin}
-            className="px-4 py-2 border border-red-600 text-red-600 rounded-full hover:bg-red-600 hover:text-white transition-colors duration-300"
+            className="px-4 py-2 bg-black  text-white rounded-[5px] font-bold hover:bg-red-600 hover:text-white transition-colors duration-300"
           >
             Log In
           </button>

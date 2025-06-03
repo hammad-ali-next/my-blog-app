@@ -12,24 +12,17 @@ type BlogCardProps = {
 
 export default function BlogCard({ blog }: BlogCardProps) {
   return (
-    <div className="bg-white rounded-lg shadow-md overflow-hidden max-w-sm cursor-pointer flex flex-col">
-      {/* Image container with padding and relative to clip scaled image */}
-      <div className="relative overflow-hidden rounded-t-lg p-4 h-48">
-        {blog.image_base64.startsWith("data:image") ? (
-          <img
-            src={blog.image_base64}
-            alt={blog.title}
-            className="w-full h-full object-cover rounded-lg transform transition-transform duration-500 ease-in-out hover:scale-105"
-          />
-        ) : (
+    <div className="bg-white rounded-lg border-gray-200 border overflow-hidden max-w-sm cursor-pointer flex flex-col group">
+      {/* Image container */}
+      <div className="relative p-2 overflow-hidden rounded-t-lg h-48">
+        <div className="relative h-full rounded-lg overflow-hidden">
           <Image
             src={blog.image_base64}
             alt={blog.title}
             fill
-            sizes="(max-width: 400px) 100vw, 400px"
-            className="object-cover rounded-lg transform transition-transform duration-500 ease-in-out hover:scale-105"
+            className="object-cover rounded-lg transform transition-transform duration-500 ease-in-out group-hover:scale-105"
           />
-        )}
+        </div>
       </div>
 
       {/* Content with padding and relative for arrow positioning */}
@@ -39,9 +32,13 @@ export default function BlogCard({ blog }: BlogCardProps) {
           {blog.title}
         </h2>
 
-        <p className="text-sm text-gray-600 mb-10">
+        <p className="text-sm text-gray-600 mb-12">
           By <span className="font-medium">{blog.author_name}</span> -{" "}
-          {blog.created_date}
+          {new Date(blog.created_date).toLocaleDateString("en-US", {
+            month: "long",
+            day: "numeric",
+            year: "numeric",
+          })}
         </p>
 
         {/* Arrow box */}

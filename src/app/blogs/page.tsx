@@ -11,19 +11,25 @@ export type blogCard = {
   created_date: string;
 };
 
-const DEFAULT_IMAGE = "/logo.png";
+type RawBlog = {
+  id: number;
+  title: string;
+  image_base64: string;
+  creator: { name: string };
+  created_date?: string;
+};
 
 export default async function Blogs({
   searchParams,
 }: {
-  searchParams?: { category?: string };
+  searchParams?: Promise<{ category?: string }>;
 }) {
   const category = (await searchParams)?.category?.toLowerCase();
   const url = category ? `/blogs?category=${category}` : "/blogs";
 
   try {
     const response = await axiosInstance.get(url);
-    const blogs: blogCard[] = response.data.map((b: any) => ({
+    const blogs: blogCard[] = response.data.map((b: RawBlog) => ({
       id: b.id,
       title: b.title,
       image_base64: b.image_base64,
@@ -33,8 +39,8 @@ export default async function Blogs({
     console.log("Fetched blogs:", blogs);
 
     return (
-      <main className="p-8 bg-gray-50 min-h-screen rounded-2xl">
-        <h1 className="text-4xl font-bold text-center mb-8 text-gray-900">
+      <main className="p-8 px-80 min-h-screen rounded-2xl">
+        <h1 className="text-4xl font-bold text-[90px] text-center mb-8 text-gray-900">
           Blogs
         </h1>
 

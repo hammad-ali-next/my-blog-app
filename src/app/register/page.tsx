@@ -15,11 +15,7 @@ export default function Register() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    const data = {
-      name,
-      email,
-      password,
-    };
+    const data = { name, email, password };
     try {
       const response = await axiosInstance.post("/users/register", data, {
         headers: {
@@ -38,72 +34,81 @@ export default function Register() {
   };
 
   return (
-    <main className="min-h-screen flex items-center justify-center bg-gray-50">
-      <div className="w-full max-w-sm bg-white p-8 rounded-3xl shadow-lg border border-red-200">
+    <main className="min-h-screen flex items-center justify-center bg-gray-100">
+      <div className="w-full max-w-sm bg-white p-8 rounded-3xl shadow-lg border border-gray-200">
         <h1 className="text-5xl text-center mb-10 font-bold text-red-600">
           Register
         </h1>
         <form onSubmit={handleSubmit} className="space-y-6">
-          <div>
-            <label
-              htmlFor="name"
-              className="block mb-1 font-medium text-gray-700"
-            >
-              Name
-            </label>
+          {/* Name Field */}
+          <div className="relative">
             <input
+              type="text"
               id="name"
               name="name"
-              type="text"
               required
-              className="w-full border border-red-400 rounded-2xl p-3 focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-red-600 transition"
-              placeholder="Name"
               value={name}
               onChange={(e) => setName(e.target.value)}
+              placeholder=""
+              className="block bg-gray-50 px-2.5 pb-2.5 pt-4 w-full text-sm text-black rounded-[5px] border border-gray-200 appearance-none focus:outline-none focus:ring-0 focus:border-black peer"
             />
-          </div>
-          <div>
             <label
-              htmlFor="email"
-              className="block mb-1 font-medium text-gray-700"
+              htmlFor="name"
+              className="absolute text-sm bg-white peer-placeholder-shown:bg-transparent peer-focus:bg-white peer-placeholder-shown:text-gray-500 duration-300 transform -translate-y-4 scale-100 top-2 z-10 origin-[0] px-2 peer-placeholder-shown:scale-100 peer-focus:scale-100 peer-focus:text-black peer-placeholder-shown:translate-y-0 peer-placeholder-shown:top-4 peer-focus:top-2 peer-focus:-translate-y-4 start-2"
             >
-              Email
+              Name <span className="text-red-600">*</span>
             </label>
+          </div>
+
+          {/* Email Field */}
+          <div className="relative">
             <input
+              type="email"
               id="email"
               name="email"
-              type="email"
               required
-              className="w-full border border-red-400 rounded-2xl p-3 focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-red-600 transition"
-              placeholder="Email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
+              placeholder=""
+              className="block bg-gray-50 px-2.5 pb-2.5 pt-4 w-full text-sm text-black rounded-[5px] border border-gray-200 appearance-none focus:outline-none focus:ring-0 focus:border-black peer"
             />
-          </div>
-          <div>
             <label
-              htmlFor="password"
-              className="block mb-1 font-medium text-gray-700"
+              htmlFor="email"
+              className="absolute text-sm bg-white peer-placeholder-shown:bg-transparent peer-focus:bg-white peer-placeholder-shown:text-gray-500 duration-300 transform -translate-y-4 scale-100 top-2 z-10 origin-[0] px-2 peer-placeholder-shown:scale-100 peer-focus:scale-100 peer-focus:text-black peer-placeholder-shown:translate-y-0 peer-placeholder-shown:top-4 peer-focus:top-2 peer-focus:-translate-y-4 start-2"
             >
-              Password
+              Email <span className="text-red-600">*</span>
             </label>
+          </div>
+
+          {/* Password Field */}
+          <div className="relative">
             <input
+              type="password"
               id="password"
               name="password"
-              type="password"
               required
-              className="w-full border border-red-400 rounded-2xl p-3 focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-red-600 transition"
-              placeholder="Password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
+              placeholder=""
+              className="block bg-gray-50 px-2.5 pb-2.5 pt-4 w-full text-sm text-black rounded-[5px] border border-gray-200 appearance-none focus:outline-none focus:ring-0 focus:border-black peer"
             />
+            <label
+              htmlFor="password"
+              className="absolute text-sm bg-white peer-placeholder-shown:bg-transparent peer-focus:bg-white peer-placeholder-shown:text-gray-500 duration-300 transform -translate-y-4 scale-100 top-2 z-10 origin-[0] px-2 peer-placeholder-shown:scale-100 peer-focus:scale-100 peer-focus:text-black peer-placeholder-shown:translate-y-0 peer-placeholder-shown:top-4 peer-focus:top-2 peer-focus:-translate-y-4 start-2"
+            >
+              Password <span className="text-red-600">*</span>
+            </label>
           </div>
-          <button
-            type="submit"
-            className="w-full py-3 bg-red-600 text-white rounded-2xl font-semibold hover:bg-red-700 transition-colors duration-300"
-          >
-            Register
-          </button>
+
+          {/* Submit Button */}
+          <div className="flex justify-center">
+            <button
+              type="submit"
+              className="px-10 py-2 bg-black text-white rounded-[5px] font-bold hover:bg-red-600 hover:text-white transition-colors duration-300"
+            >
+              Register
+            </button>
+          </div>
         </form>
 
         {error && (

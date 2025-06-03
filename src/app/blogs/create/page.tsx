@@ -5,6 +5,8 @@ import { useRouter } from "next/navigation";
 import axiosInstance from "@/utils/axiosInstance";
 import dynamic from "next/dynamic";
 import DOMPurify from "dompurify";
+import { AxiosError } from "axios";
+import Image from "next/image";
 
 const TextEditor = dynamic(() => import("@/components/TextEditor"), {
   ssr: false,
@@ -28,6 +30,7 @@ export default function CreateBlogPage() {
   const [category, setCategory] = useState("");
   const [imageBase64, setImageBase64] = useState<string | null>(null);
   const [error, setError] = useState("");
+
   const categories: Category[] = [
     { name: "Technology" },
     { name: "Travel" },
@@ -56,7 +59,6 @@ export default function CreateBlogPage() {
 
     try {
       const sanitizedBody = DOMPurify.sanitize(body);
-
       await axiosInstance.post("/blogs", {
         title,
         body: sanitizedBody,
@@ -65,100 +67,126 @@ export default function CreateBlogPage() {
       });
 
       router.push("/blogs");
-    } catch (err: any) {
-      setError(err.response?.data?.detail || "Failed to create blog");
+    } catch (err) {
+      const error = err as AxiosError<{ detail?: string }>;
+      setError(error.response?.data?.detail || "Failed to create blog");
     }
   };
 
   return (
-    <main className="max-w-3xl mx-auto p-8 bg-white rounded-3xl shadow-lg">
-      <h1 className="text-4xl font-extrabold mb-8 text-red-700">
-        Create New Blog
-      </h1>
-
-      <form onSubmit={handleSubmit} className="space-y-6">
-        <div>
-          <label className="block font-semibold mb-2 text-red-700">
-            Title*
-          </label>
-          <input
-            type="text"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-            className="w-full border border-red-300 rounded-xl p-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-red-400 transition"
-            placeholder="Enter blog title"
-            required
-          />
-        </div>
-
-        <div>
-          <label className="block font-semibold mb-2 text-red-700">Body*</label>
-          <div className="border border-red-300 rounded-xl focus-within:ring-2 focus-within:ring-red-400 transition">
-            <TextEditor content={body} onChange={setBody} />
-          </div>
-        </div>
-
-        <div>
-          <label className="block font-semibold mb-2 text-red-700">
-            Category*
-          </label>
-          <select
-            value={category}
-            onChange={(e) => setCategory(e.target.value)}
-            className="w-full border border-red-300 rounded-xl p-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-red-400 transition"
-            required
-          >
-            <option value="" disabled>
-              Select a category
-            </option>
-            {categories.map((cat) => (
-              <option key={cat.name} value={cat.name}>
-                {cat.name}
-              </option>
-            ))}
-          </select>
-        </div>
-
-        <div>
-          <label className="block font-semibold mb-2 text-red-700">
-            Image (required)
-          </label>
-
-          {/* Custom file input */}
-          <label
-            htmlFor="imageUpload"
-            className="inline-block cursor-pointer rounded-xl border border-dashed border-red-400 px-6 py-4 text-red-600 hover:border-red-600 hover:text-red-700 transition text-center w-full"
-          >
-            Choose an image
-          </label>
-          <input
-            id="imageUpload"
-            type="file"
-            accept="image/*"
-            onChange={handleImageChange}
-            className="hidden"
-          />
-
-          {imageBase64 && (
-            <div className="mt-4 rounded-xl overflow-hidden border border-red-300 shadow-md max-h-64 w-full">
-              <img
-                src={imageBase64}
-                alt="Preview"
-                className="w-full h-full object-contain"
-              />
-            </div>
-          )}
-        </div>
-
-        {error && <p className="text-red-600 font-semibold">{error}</p>}
-
-        <button
-          type="submit"
-          className="w-full bg-red-600 text-white font-semibold py-3 rounded-xl hover:bg-red-700 transition"
-        >
+    <main className="min-h-screen flex items-center justify-center bg-gray-100">
+      <div className="w-full max-w-3xl bg-white p-8 rounded-3xl shadow-lg border border-gray-200">
+        <h1 className="text-5xl text-center mb-10 font-bold text-red-600">
           Create Blog
-        </button>
-      </form>
+        </h1>
+
+        <form onSubmit={handleSubmit} className="space-y-6">
+          {/* Title */}
+          <div className="relative">
+            <input
+              type="text"
+              id="title"
+              name="title"
+              required
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+              placeholder=""
+              className="block bg-gray-50 px-2.5 pb-2.5 pt-4 w-full text-sm text-black rounded-[5px] border border-gray-200 appearance-none focus:outline-none focus:ring-0 focus:border-black peer"
+            />
+            <label
+              htmlFor="title"
+              className="absolute text-sm bg-white peer-placeholder-shown:bg-transparent peer-focus:bg-white peer-placeholder-shown:text-gray-500 duration-300 transform -translate-y-4 scale-100 top-2 z-10 origin-[0] px-2 peer-placeholder-shown:scale-100 peer-focus:scale-100 peer-focus:text-black peer-placeholder-shown:translate-y-0 peer-placeholder-shown:top-4 peer-focus:top-2 peer-focus:-translate-y-4 start-2"
+            >
+              Title <span className="text-red-600">*</span>
+            </label>
+          </div>
+
+          {/* Body */}
+          <div>
+            <label className="block mb-2 text-sm font-medium text-gray-700">
+              Body <span className="text-red-600">*</span>
+            </label>
+            <div className="border border-gray-200 rounded-[5px] focus-within:ring-1 focus-within:ring-black transition">
+              <TextEditor content={body} onChange={setBody} />
+            </div>
+          </div>
+
+          {/* Category */}
+          <div className="relative">
+            <select
+              id="category"
+              name="category"
+              required
+              value={category}
+              onChange={(e) => setCategory(e.target.value)}
+              className="block bg-gray-50 px-2.5 pb-2.5 pt-4 w-full text-sm text-black rounded-[5px] border border-gray-200 appearance-none focus:outline-none focus:ring-0 focus:border-black peer"
+            >
+              <option value="" disabled hidden></option>
+              {categories.map((cat) => (
+                <option key={cat.name} value={cat.name}>
+                  {cat.name}
+                </option>
+              ))}
+            </select>
+            <label
+              htmlFor="category"
+              className="absolute text-sm bg-white peer-placeholder-shown:bg-transparent peer-focus:bg-white peer-placeholder-shown:text-gray-500 duration-300 transform -translate-y-4 scale-100 top-2 z-10 origin-[0] px-2 peer-placeholder-shown:scale-100 peer-focus:text-black peer-placeholder-shown:translate-y-0 peer-placeholder-shown:top-4 peer-focus:top-2 peer-focus:-translate-y-4 start-2"
+            >
+              Category <span className="text-red-600">*</span>
+            </label>
+          </div>
+
+          {/* Image Upload */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Image (required)
+            </label>
+            <label
+              htmlFor="imageUpload"
+              className="inline-block cursor-pointer rounded-[5px] border border-dashed border-gray-400 px-6 py-4 text-black hover:border-black hover:text-red-600 transition text-center w-full"
+            >
+              Choose an image
+            </label>
+            <input
+              id="imageUpload"
+              type="file"
+              accept="image/*"
+              onChange={handleImageChange}
+              className="hidden"
+            />
+            {imageBase64 && (
+              <div
+                className="relative mt-4 rounded-[5px] overflow-hidden border border-gray-300 shadow-md max-h-64 w-full"
+                style={{ aspectRatio: "auto" }}
+              >
+                <Image
+                  src={imageBase64}
+                  alt="Preview"
+                  fill
+                  style={{ objectFit: "contain" }}
+                  sizes="100vw"
+                  priority={true}
+                />
+              </div>
+            )}
+          </div>
+
+          {/* Error */}
+          {error && (
+            <p className="text-center text-red-600 font-medium">{error}</p>
+          )}
+
+          {/* Submit Button */}
+          <div className="flex justify-center">
+            <button
+              type="submit"
+              className="px-10 py-2 bg-black text-white rounded-[5px] font-bold hover:bg-red-600 hover:text-white transition-colors duration-300"
+            >
+              Create Blog
+            </button>
+          </div>
+        </form>
+      </div>
     </main>
   );
 }

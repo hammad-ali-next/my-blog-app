@@ -1,6 +1,6 @@
 "use client";
 
-import { useEditor, EditorContent } from "@tiptap/react";
+import { useEditor, EditorContent, Editor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import Underline from "@tiptap/extension-underline";
 import TextStyle from "@tiptap/extension-text-style";
@@ -81,7 +81,7 @@ export default function TextEditor({ content, onChange }: Props) {
   );
 }
 
-function MenuBar({ editor }: { editor: any }) {
+function MenuBar({ editor }: { editor: Editor }) {
   if (!editor) return null;
 
   const baseBtnClasses =

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import Navbar from "@/components/navbar";
+import Link from "next/link";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -16,16 +17,14 @@ export default function RootLayout({
     <html lang="en">
       <body>
         <Navbar></Navbar>
-        <div className="border m-6 bg-white border-gray-200 rounded-2xl">
-          {children}
-        </div>
+        <div className="my-6 mt-[100px] bg-white">{children}</div>
 
         <footer className="m-6 z-20 w-vh p-4 bg-white border-t border-gray-200 shadow-sm flex items-center justify-center text-center">
           <span className="text-sm">
             © 2025{" "}
-            <a href="/" className="hover:underline">
+            <Link href={"/"} className="hover:underline">
               Bloogie™
-            </a>
+            </Link>
             . All Rights Reserved.
           </span>
         </footer>
