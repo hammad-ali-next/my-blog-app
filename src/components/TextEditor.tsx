@@ -36,6 +36,7 @@ export default function TextEditor({ content, onChange }: Props) {
     onUpdate: ({ editor }) => {
       onChange(editor.getHTML());
     },
+    immediatelyRender: false,
   });
 
   useEffect(() => {

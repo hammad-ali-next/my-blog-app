@@ -23,20 +23,20 @@ export default function EditBlogPage() {
   const [title, setTitle] = useState("");
   const [body, setBody] = useState("");
   const [category, setCategory] = useState("");
-  const [imageBase64, setImageBase64] = useState<string | null>(null);
+  const [imageSrc, setImageSrc] = useState<string | null>(null); // <-- changed from imageBase64
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(true);
   const [aspectRatio, setAspectRatio] = useState(1);
 
   useEffect(() => {
-    if (!imageBase64) return;
+    if (!imageSrc) return;
 
     const img = new window.Image();
-    img.src = imageBase64;
+    img.src = imageSrc;
     img.onload = () => {
       setAspectRatio(img.width / img.height);
     };
-  }, [imageBase64]);
+  }, [imageSrc]);
 
   const categories: Category[] = [
     { name: "Technology" },
@@ -56,7 +56,9 @@ export default function EditBlogPage() {
         setTitle(blog.title);
         setBody(blog.body);
         setCategory(blog.category ? capitalize(blog.category) : "");
-        setImageBase64(blog.image_base64 || null);
+
+        // this can be a full image URL from supabase
+        setImageSrc(blog.image_url || null);
       })
       .catch(() => {
         setError("Failed to load blog");
@@ -73,7 +75,7 @@ export default function EditBlogPage() {
 
     const reader = new FileReader();
     reader.onloadend = () => {
-      setImageBase64(reader.result as string);
+      setImageSrc(reader.result as string);
     };
     reader.readAsDataURL(file);
   };
@@ -82,7 +84,7 @@ export default function EditBlogPage() {
     e.preventDefault();
     setError("");
 
-    if (!title || !body || !category || !imageBase64) {
+    if (!title || !body || !category || !imageSrc) {
       setError("Please fill all required fields and upload an image");
       return;
     }
@@ -94,7 +96,7 @@ export default function EditBlogPage() {
         title,
         body: sanitizedBody,
         category: category.toLowerCase(),
-        image_base64: imageBase64,
+        image_base64: imageSrc, // still sending base64 or URL depending on state
       });
 
       router.push(`/blogs/${id}`);
@@ -123,7 +125,6 @@ export default function EditBlogPage() {
               required
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              placeholder=""
               className="block bg-gray-50 px-2.5 pb-2.5 pt-4 w-full text-sm text-black rounded-[5px] border border-gray-200 appearance-none focus:outline-none focus:ring-0 focus:border-black peer"
             />
             <label
@@ -163,7 +164,7 @@ export default function EditBlogPage() {
             </select>
             <label
               htmlFor="category"
-              className="absolute text-sm bg-white peer-placeholder-shown:bg-transparent peer-focus:bg-white peer-placeholder-shown:text-gray-500 duration-300 transform -translate-y-4 scale-100 top-2 z-10 origin-[0] px-2 peer-placeholder-shown:scale-100 peer-focus:text-black peer-placeholder-shown:translate-y-0 peer-placeholder-shown:top-4 peer-focus:top-2 peer-focus:-translate-y-4 start-2"
+              className="absolute text-sm bg-white peer-placeholder-shown:bg-transparent peer-focus:bg-white peer-placeholder-shown:text-gray-500 duration-300 transform -translate-y-4 scale-100 top-2 z-10 origin-[0] px-2 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-placeholder-shown:top-4 peer-focus:top-2 peer-focus:-translate-y-4 start-2"
             >
               Category <span className="text-red-600">*</span>
             </label>
@@ -187,13 +188,13 @@ export default function EditBlogPage() {
               onChange={handleImageChange}
               className="hidden"
             />
-            {imageBase64 && (
+            {imageSrc && (
               <div
                 className="relative mt-4 rounded-[5px] overflow-hidden shadow-2xl max-h-64 mx-auto"
-                style={{ aspectRatio: aspectRatio }}
+                style={{ aspectRatio }}
               >
                 <Image
-                  src={imageBase64}
+                  src={imageSrc}
                   alt="Preview"
                   fill
                   style={{ objectFit: "contain" }}

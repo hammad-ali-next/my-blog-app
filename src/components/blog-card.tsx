@@ -4,7 +4,7 @@ type BlogCardProps = {
   blog: {
     id: number;
     title: string;
-    image_base64: string;
+    image_url: string;
     author_name: string;
     created_date: string;
   };
@@ -17,7 +17,7 @@ export default function BlogCard({ blog }: BlogCardProps) {
       <div className="relative p-2 overflow-hidden rounded-t-lg h-48">
         <div className="relative h-full rounded-lg overflow-hidden">
           <Image
-            src={blog.image_base64}
+            src={blog.image_url}
             alt={blog.title}
             fill
             className="object-cover rounded-lg transform transition-transform duration-500 ease-in-out group-hover:scale-105"

@@ -10,7 +10,7 @@ import { useRouter } from "next/navigation";
 export type blogCard = {
   id: number;
   title: string;
-  image_base64: string;
+  image_url: string;
   author_name: string;
   created_date: string;
 };
@@ -18,7 +18,7 @@ export type blogCard = {
 type RawBlog = {
   id: number;
   title: string;
-  image_base64: string;
+  image_url: string;
   creator: { name: string };
   created_date?: string;
 };
@@ -35,7 +35,7 @@ export default function MyBlogs() {
         const blogData: blogCard[] = res.data.map((b: RawBlog) => ({
           id: b.id,
           title: b.title,
-          image_base64: b.image_base64,
+          image_url: b.image_url,
           author_name: b.creator.name,
           created_date: b.created_date || "time",
         }));

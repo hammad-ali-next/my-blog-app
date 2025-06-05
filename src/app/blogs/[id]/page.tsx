@@ -43,7 +43,7 @@ export default async function Blog_With_ID({
           {/* Right side: image */}
           <div className="col-span-2 pr-12">
             <Image
-              src={data.image_base64}
+              src={data.image_url}
               alt={data.title}
               width={400}
               height={300}
