@@ -30,6 +30,7 @@ export default function CreateBlogPage() {
   const [category, setCategory] = useState("");
   const [imageBase64, setImageBase64] = useState<string | null>(null);
   const [error, setError] = useState("");
+  const [aspectRatio, setAspectRatio] = useState(1);
 
   const categories: Category[] = [
     { name: "Technology" },
@@ -72,6 +73,15 @@ export default function CreateBlogPage() {
       setError(error.response?.data?.detail || "Failed to create blog");
     }
   };
+  useEffect(() => {
+    if (!imageBase64) return;
+
+    const img = new window.Image();
+    img.src = imageBase64;
+    img.onload = () => {
+      setAspectRatio(img.width / img.height);
+    };
+  }, [imageBase64]);
 
   return (
     <main className="min-h-screen flex items-center justify-center bg-gray-100">
@@ -156,8 +166,8 @@ export default function CreateBlogPage() {
             />
             {imageBase64 && (
               <div
-                className="relative mt-4 rounded-[5px] overflow-hidden border border-gray-300 shadow-md max-h-64 w-full"
-                style={{ aspectRatio: "auto" }}
+                className="relative mt-4 rounded-[5px] overflow-hidden shadow-2xl max-h-64 mx-auto"
+                style={{ aspectRatio: aspectRatio }}
               >
                 <Image
                   src={imageBase64}

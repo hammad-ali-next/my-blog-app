@@ -26,6 +26,17 @@ export default function EditBlogPage() {
   const [imageBase64, setImageBase64] = useState<string | null>(null);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(true);
+  const [aspectRatio, setAspectRatio] = useState(1);
+
+  useEffect(() => {
+    if (!imageBase64) return;
+
+    const img = new window.Image();
+    img.src = imageBase64;
+    img.onload = () => {
+      setAspectRatio(img.width / img.height);
+    };
+  }, [imageBase64]);
 
   const categories: Category[] = [
     { name: "Technology" },
@@ -177,13 +188,17 @@ export default function EditBlogPage() {
               className="hidden"
             />
             {imageBase64 && (
-              <div className="mt-4 rounded-[5px] overflow-hidden border border-gray-300 shadow-md max-h-64 w-full">
+              <div
+                className="relative mt-4 rounded-[5px] overflow-hidden shadow-2xl max-h-64 mx-auto"
+                style={{ aspectRatio: aspectRatio }}
+              >
                 <Image
                   src={imageBase64}
                   alt="Preview"
-                  width={800}
-                  height={0} // 👈 Hack: will get ignored, but you avoid TS errors
-                  className="h-auto w-full object-contain"
+                  fill
+                  style={{ objectFit: "contain" }}
+                  sizes="100vw"
+                  priority={true}
                 />
               </div>
             )}

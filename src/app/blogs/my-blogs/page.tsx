@@ -5,6 +5,7 @@ import axiosInstance from "@/utils/axiosInstance";
 import BlogCard from "@/components/blog-card";
 import Link from "next/link";
 import { AxiosError } from "axios";
+import { useRouter } from "next/navigation";
 
 export type blogCard = {
   id: number;
@@ -49,6 +50,18 @@ export default function MyBlogs() {
       });
   }, []);
 
+  const handleDelete = async (id: number) => {
+    setError("");
+
+    try {
+      await axiosInstance.delete(`/blogs/${id}`);
+      setBlogs((prevBlogs) => prevBlogs.filter((blog) => blog.id !== id)); // <-- update UI
+    } catch (err) {
+      const error = err as AxiosError<{ detail?: string }>;
+      setError(error.response?.data?.detail || "Failed to delete blog");
+    }
+  };
+
   if (loading) {
     return (
       <div className="text-center mt-10 text-red-600 font-semibold text-lg">
@@ -90,12 +103,12 @@ export default function MyBlogs() {
                 >
                   Edit
                 </Link>
-                <Link
-                  href={`/blogs/delete/${b.id}`}
+                <button
+                  onClick={() => handleDelete(b.id)}
                   className="px-4 py-2 rounded-[5px] bg-red-300 text-red-900 font-semibold hover:bg-red-400 transition"
                 >
                   Delete
-                </Link>
+                </button>
               </div>
             </div>
           ))}
