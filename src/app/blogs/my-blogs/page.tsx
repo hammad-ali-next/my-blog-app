@@ -5,7 +5,6 @@ import axiosInstance from "@/utils/axiosInstance";
 import BlogCard from "@/components/blog-card";
 import Link from "next/link";
 import { AxiosError } from "axios";
-import { useRouter } from "next/navigation";
 
 export type blogCard = {
   id: number;
